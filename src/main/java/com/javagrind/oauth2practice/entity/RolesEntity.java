@@ -8,18 +8,20 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Getter
+@Setter
 public class RolesEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NonNull
     @Column(name ="role_id", nullable = false)
-    private String role_id;
+    private Integer role_id;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role roleName;
 
     public RolesEntity(Role role){
-        this.setRole(role);
+        this.setRoleName(role);
     }
 }

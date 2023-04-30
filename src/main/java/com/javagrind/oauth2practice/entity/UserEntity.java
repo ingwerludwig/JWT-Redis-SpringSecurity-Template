@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -63,7 +64,14 @@ public class UserEntity {
     @JoinTable( name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
-    Set<RolesEntity> roles;
+    Set<RolesEntity> roles = new HashSet<>();
+
+    public Set<RolesEntity> getRoles() {
+        return roles;
+    }
+    public void setRoles(Set<RolesEntity> roles) {
+        this.roles = roles;
+    }
 
     public UserEntity(String email, String password, String username){
         this.setEmail(email);
