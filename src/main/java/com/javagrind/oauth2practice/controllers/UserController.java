@@ -2,14 +2,12 @@ package com.javagrind.oauth2practice.controllers;
 
 import com.javagrind.oauth2practice.dto.Response;
 import com.javagrind.oauth2practice.dto.request.User.DeleteRequest;
-import com.javagrind.oauth2practice.dto.request.User.RegisterRequest;
 import com.javagrind.oauth2practice.dto.request.User.UpdateUserRequest;
 import com.javagrind.oauth2practice.entity.UserEntity;
 import com.javagrind.oauth2practice.handler.BadRequestExceptionHandler;
 import com.javagrind.oauth2practice.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.logging.Logger;

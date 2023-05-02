@@ -8,7 +8,6 @@ import com.javagrind.oauth2practice.handler.BadRequestExceptionHandler;
 import com.javagrind.oauth2practice.repositories.RoleRepository;
 import com.javagrind.oauth2practice.repositories.UserRepository;
 import com.javagrind.oauth2practice.security.jwt.JwtUtils;
-import com.javagrind.oauth2practice.security.services.UserDetailsImpl;
 import com.javagrind.oauth2practice.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -53,47 +44,50 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<Response<Object>> authenticateUser(@Valid @RequestBody LoginRequest request, Errors errors) {
-
-        if (errors.hasErrors()) BadRequestExceptionHandler.handle(errors);
+    public ResponseEntity<Response<Object>> authenticateUser(@Valid @RequestBody LoginRequest request, BindingResult errors) {
         Response<Object> response;
 
-        try {
-            Object result = userService.login(request);
-            response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "Token created successfully", result);
-            return ResponseEntity.ok().body(response);
-        } catch (HttpClientErrorException.Unauthorized ex) {
-            response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        } catch (HttpClientErrorException.Forbidden ex) {
-            response = new Response<>(HttpStatus.FORBIDDEN.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        } catch (Exception ex) {
-            response = new Response<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        if (errors.hasErrors()) {return BadRequestExceptionHandler.handle(errors);
+        } else {
 
+            try {
+                Object result = userService.login(request);
+                response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "Token created successfully", result);
+                return ResponseEntity.ok().body(response);
+            } catch (HttpClientErrorException.Unauthorized ex) {
+                response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            } catch (HttpClientErrorException.Forbidden ex) {
+                response = new Response<>(HttpStatus.FORBIDDEN.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            } catch (Exception ex) {
+                response = new Response<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        }
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Response<UserEntity>> registerUser(@Valid @RequestBody RegisterRequest request, Errors errors){
-        Response<UserEntity> response;
+    public ResponseEntity<Response<Object>> registerUser(@Valid @RequestBody RegisterRequest request, BindingResult errors){
+        Response<Object> response;
 
-        if (errors.hasErrors()) BadRequestExceptionHandler.handle(errors);
+        if (errors.hasErrors()) {return BadRequestExceptionHandler.handle(errors);
+        } else {
 
-        try {
-            UserEntity result = userService.create(request);
-            response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "User registered successfully", result);
-            return ResponseEntity.ok().body(response);
-        } catch (HttpClientErrorException.Unauthorized ex) {
-            response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        } catch (HttpClientErrorException.Forbidden ex) {
-            response = new Response<>(HttpStatus.FORBIDDEN.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        } catch (Exception ex) {
-            response = new Response<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), Boolean.FALSE, ex.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            try {
+                UserEntity result = userService.create(request);
+                response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "User registered successfully", result);
+                return ResponseEntity.ok().body(response);
+            } catch (HttpClientErrorException.Unauthorized ex) {
+                response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            } catch (HttpClientErrorException.Forbidden ex) {
+                response = new Response<>(HttpStatus.FORBIDDEN.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            } catch (Exception ex) {
+                response = new Response<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
         }
     }
 

@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     @Lazy
     private JwtUtils jwtUtils;
@@ -25,13 +25,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
-    public AuthTokenFilter() {
+    public JwtAuthFilter() {
     }
 
     @Autowired
-    public AuthTokenFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
+    public JwtAuthFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
     }

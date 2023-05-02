@@ -4,6 +4,7 @@ import com.javagrind.oauth2practice.dto.request.Auth.LoginRequest;
 import com.javagrind.oauth2practice.dto.request.User.DeleteRequest;
 import com.javagrind.oauth2practice.dto.request.User.RegisterRequest;
 import com.javagrind.oauth2practice.dto.request.User.UpdateUserRequest;
+import com.javagrind.oauth2practice.dto.response.LoginResponse;
 import com.javagrind.oauth2practice.entity.Role;
 import com.javagrind.oauth2practice.entity.RolesEntity;
 import com.javagrind.oauth2practice.entity.UserEntity;
@@ -21,12 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -79,13 +76,15 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-        List<Object> data = Arrays.asList(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),roles);
-        return data;
+
+//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+//        List<String> roles = userDetails.getAuthorities().stream()
+//                .map(item -> item.getAuthority())
+//                .collect(Collectors.toList());
+//        List<Object> data = Arrays.asList(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),roles);
+
+        return new LoginResponse(jwt,userDetails.getUsername());
     }
 
     @Override
