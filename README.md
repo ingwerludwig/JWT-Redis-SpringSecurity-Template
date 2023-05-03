@@ -47,6 +47,8 @@ For more examples, please look to the <a href="https://documenter.getpostman.com
 
 <!-- SPRING SECURITY FLOW -->
 ## Flow
+![image](https://user-images.githubusercontent.com/54592376/235865575-786c2363-38ba-4d6b-b70d-f8eacee9d704.png)
+
 ![spring-boot-authentication-spring-security-architecture](https://user-images.githubusercontent.com/54592376/235856519-8af31b9c-cf20-49ff-aef4-3fe72e3ccbe9.png)
 
 Defined Spring Security Mechanism for Web Security Configuration (JWT) : <br /><br />
