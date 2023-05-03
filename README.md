@@ -40,7 +40,7 @@ First thing first, install <a href="https://docs.spring.io/spring-boot/docs/1.0.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-For more examples, please look to the <a href="https://documenter.getpostman.com/view/26715144/2s93eVVYcp">documentation</a>
+For more examples, please look to the <a href="https://documenter.getpostman.com/view/26715144/2s93eVWYuf">documentation</a>
 
 
 
