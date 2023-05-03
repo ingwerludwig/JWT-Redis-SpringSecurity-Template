@@ -1,7 +1,6 @@
 <!-- JWT with Redis (Jedis) Spring Security Template -->
 ## About The Template
 
-![spring-boot-authentication-spring-security-architecture](https://user-images.githubusercontent.com/54592376/235856519-8af31b9c-cf20-49ff-aef4-3fe72e3ccbe9.png)
 JWT-Redis Template using Spring Security new approach without WebSecurityConfigurerAdapter (Deprecated)
 
 
@@ -65,6 +64,8 @@ Defined Spring Security Mechanism for Web Security Configuration (JWT) : <br /><
     9. Filter chain (ApplicationFilterChain) do internalFilter and handle the request method as their<br />
        &nbsp;&nbsp;&nbsp;&nbsp;correspond privilege based on principal in the Token<br />
         <br /><br />
+        
+ ![spring-boot-authentication-spring-security-architecture](https://user-images.githubusercontent.com/54592376/235856519-8af31b9c-cf20-49ff-aef4-3fe72e3ccbe9.png)<br /><br />
  NOTE : Every Request will be check if the token is valid AND check if token is in Redis Block (Logging Out user removes their token in Redis block)<br />
  EVERY INVALID TOKEN OR NON EXISTED TOKEN IN REDIS, WILL BE REDIRECT TO SIGNIN API<br />
 
