@@ -1,10 +1,8 @@
 package com.javagrind.oauth2practice.services.impl;
 
-import com.javagrind.oauth2practice.dto.request.Auth.LoginRequest;
 import com.javagrind.oauth2practice.dto.request.User.DeleteRequest;
 import com.javagrind.oauth2practice.dto.request.User.RegisterRequest;
 import com.javagrind.oauth2practice.dto.request.User.UpdateUserRequest;
-import com.javagrind.oauth2practice.dto.response.LoginResponse;
 import com.javagrind.oauth2practice.entity.Role;
 import com.javagrind.oauth2practice.entity.RolesEntity;
 import com.javagrind.oauth2practice.entity.UserEntity;
@@ -12,14 +10,10 @@ import com.javagrind.oauth2practice.repositories.RoleRepository;
 import com.javagrind.oauth2practice.repositories.UserRepository;
 import com.javagrind.oauth2practice.security.jwt.JwtUtils;
 import com.javagrind.oauth2practice.security.services.RedisService;
-import com.javagrind.oauth2practice.security.services.UserDetailsImpl;
 import com.javagrind.oauth2practice.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,25 +66,6 @@ public class UserServiceImpl implements UserService {
         return userEntity;
     }
 
-    @Override
-    public Object login(LoginRequest request){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        redisService.store(jwt);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(item -> item.getAuthority())
-//                .collect(Collectors.toList());
-//        List<Object> data = Arrays.asList(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),roles);
-
-        return new LoginResponse(jwt,userDetails.getUsername());
-    }
 
     @Override
     public UserEntity findByEmail(String requestedEmail) {

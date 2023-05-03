@@ -14,6 +14,4 @@ public interface UserService {
     UserEntity update(String id,UpdateUserRequest updateRequest);
 
     String delete(DeleteRequest request);
-
-    Object login(LoginRequest request);
 }

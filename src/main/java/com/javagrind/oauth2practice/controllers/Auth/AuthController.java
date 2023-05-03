@@ -2,12 +2,14 @@ package com.javagrind.oauth2practice.controllers.Auth;
 
 import com.javagrind.oauth2practice.dto.Response;
 import com.javagrind.oauth2practice.dto.request.Auth.LoginRequest;
+import com.javagrind.oauth2practice.dto.request.Auth.LogoutRequest;
 import com.javagrind.oauth2practice.dto.request.User.RegisterRequest;
 import com.javagrind.oauth2practice.entity.UserEntity;
 import com.javagrind.oauth2practice.handler.BadRequestExceptionHandler;
 import com.javagrind.oauth2practice.repositories.RoleRepository;
 import com.javagrind.oauth2practice.repositories.UserRepository;
 import com.javagrind.oauth2practice.security.jwt.JwtUtils;
+import com.javagrind.oauth2practice.services.AuthService;
 import com.javagrind.oauth2practice.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -51,7 +54,7 @@ public class AuthController {
         } else {
 
             try {
-                Object result = userService.login(request);
+                Object result = authService.login(request);
                 response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "Token created successfully", result);
                 return ResponseEntity.ok().body(response);
             } catch (HttpClientErrorException.Unauthorized ex) {
@@ -77,6 +80,30 @@ public class AuthController {
             try {
                 UserEntity result = userService.create(request);
                 response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "User registered successfully", result);
+                return ResponseEntity.ok().body(response);
+            } catch (HttpClientErrorException.Unauthorized ex) {
+                response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            } catch (HttpClientErrorException.Forbidden ex) {
+                response = new Response<>(HttpStatus.FORBIDDEN.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            } catch (Exception ex) {
+                response = new Response<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), Boolean.FALSE, ex.getMessage(), null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        }
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<Response<Object>> logoutUser(@Valid @RequestBody LogoutRequest request, BindingResult errors){
+        Response<Object> response;
+
+        if (errors.hasErrors()) {return BadRequestExceptionHandler.handle(errors);
+        } else {
+
+            try {
+                Object result = authService.logout(request);
+                response = new Response<>(HttpStatus.OK.value(), Boolean.TRUE, "Logout success", result);
                 return ResponseEntity.ok().body(response);
             } catch (HttpClientErrorException.Unauthorized ex) {
                 response = new Response<>(HttpStatus.UNAUTHORIZED.value(), Boolean.FALSE, ex.getMessage(), null);

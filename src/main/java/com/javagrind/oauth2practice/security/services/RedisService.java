@@ -4,44 +4,68 @@ import com.javagrind.oauth2practice.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisException;
 
 @Service()
 @RequiredArgsConstructor
 public class RedisService {
-
     @Autowired
     JwtUtils jwtUtils;
-    JedisPooled jedis = new JedisPooled("localhost", 6379);
+    JedisPool jedisPool = new JedisPool("localhost", 6379);
 
     public void store(String token){
-        String email = jwtUtils.getUserNameFromJwtToken(token);
-        jedis.set(email, token);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String email = jwtUtils.getUserNameFromJwtToken(token);
+            jedis.set(email, token);
+            String get = jedis.get(email);
+//            System.err.println("Token for email "+ email +" is "+ get );
+        } catch (JedisException e) {
+            throw new JedisException(e.getMessage());
+        }
     }
 
-    public Boolean isThere(String email){
-        String token = jedis.get(email);
+    public Boolean isValid(String email){
 
-        if (token != null) {
-            System.err.println(token);
-            Long expDate = jwtUtils.getExpiredAt(token);
-            Long dateNow = (System.currentTimeMillis() / 1000);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String token = jedis.get(email);
 
-            if ((expDate > dateNow) && jwtUtils.validateJwtToken(token))
-                return Boolean.TRUE;
+            if (token != null) {
+                Long expDate = jwtUtils.getExpiredAt(token);
+                Long dateNow = (System.currentTimeMillis() / 1000);
+
+                if ((expDate > dateNow) && jwtUtils.validateJwtToken(token))
+                    return Boolean.TRUE;
+            }
+
+        } catch (JedisException e) {
+            throw new JedisException(e.getMessage());
         }
         return Boolean.FALSE;
     }
 
-    public Boolean destroyToken(String email){
-        String token = jedis.get(email);
+    public String isThere(String email){
 
-        if(token == null) {
-            return Boolean.FALSE;
-        }else {
-            jedis.del(email);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String token = jedis.get(email);
+
+            if (token != null) return token;
+        } catch (JedisException e) {
+            throw new JedisException(e.getMessage());
         }
-        return Boolean.TRUE;
+        return null;
+    }
+
+    public void destroyToken(String email){
+
+        try (Jedis jedis = jedisPool.getResource()) {
+            String token = jedis.get(email);
+            jedis.del(email);
+
+        } catch (JedisException e) {
+            throw new JedisException(e.getMessage());
+        }
     }
 
 }
