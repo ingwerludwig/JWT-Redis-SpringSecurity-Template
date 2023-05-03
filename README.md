@@ -50,7 +50,7 @@ For more examples, please look to the <a href="https://documenter.getpostman.com
 ![spring-boot-authentication-spring-security-architecture](https://user-images.githubusercontent.com/54592376/235856519-8af31b9c-cf20-49ff-aef4-3fe72e3ccbe9.png)
 
 Defined Spring Security Mechanism for Web Security Configuration (JWT)
-    1. User want to access certain controller , but SecurityContextHolder needs Token to be verified
+    1. User want to access certain controller , but SecurityContextHolder needs Token to be verified <br>
         --SecurityContextHolder holds a bunch of Security Configuration, example : WebSecurityConfig--
         --For WebSecurityConfig, we can define order or sequence of filter that must be checked--
         --Each filter must be asking Detailed User Information to AuthenticationManager to create token--
