@@ -51,22 +51,22 @@ For more examples, please look to the <a href="https://documenter.getpostman.com
 
 Defined Spring Security Mechanism for Web Security Configuration (JWT) <br />
     1. User want to access certain controller , but SecurityContextHolder needs Token to be verified <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;--SecurityContextHolder holds a bunch of Security Configuration, example : WebSecurityConfig--
-        --For WebSecurityConfig, we can define order or sequence of filter that must be checked--
-        --Each filter must be asking Detailed User Information to AuthenticationManager to create token--
-    2. JwtAuthFilter ask AuthenticationManager for UserDetails
-    3. JwtAuthFilter ask his provider (JwtAuthProvider) for UserDetails
-        --There are many of Authentication type, so certain Provider handle their own type--
-    4. Provider ask UserDetailsService to search if the requested user is existed, if yes it will build the UserDetails
-    5. When building the UserDetails, PasswordEncoder helps to checking the Password
-    6. Next, they return UserDetails to their own PIC to top until reach JwtAuthFilter
-    7. JwtAuthFilter receives UserDetails and create the valid token
-    8. Token handed to SecurityContextHolder
-    9. Filter chain (ApplicationFilterChain) do internalFilter and handle the request method as their
-        correspond privilege based on principal in the Token
-        
- NOTE : Every Request will be check if the token is valid AND check if token is in Redis Block (Logging Out user removes their token in Redis block)
- EVERY INVALID TOKEN OR NON EXISTED TOKEN IN REDIS, WILL BE REDIRECT TO SIGNIN API
+        &nbsp;&nbsp;&nbsp;&nbsp;--SecurityContextHolder holds a bunch of Security Configuration, example : WebSecurityConfig--<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;--For WebSecurityConfig, we can define order or sequence of filter that must be checked--<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;--Each filter must be asking Detailed User Information to AuthenticationManager to create token--<br />
+    2. JwtAuthFilter ask AuthenticationManager for UserDetails<br />
+    3. JwtAuthFilter ask his provider (JwtAuthProvider) for UserDetails<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;--There are many of Authentication type, so certain Provider handle their own type--<br />
+    4. Provider ask UserDetailsService to search if the requested user is existed, if yes it will build the UserDetails<br />
+    5. When building the UserDetails, PasswordEncoder helps to checking the Password<br />
+    6. Next, they return UserDetails to their own PIC to top until reach JwtAuthFilter<br />
+    7. JwtAuthFilter receives UserDetails and create the valid token<br />
+    8. Token handed to SecurityContextHolder<br />
+    9. Filter chain (ApplicationFilterChain) do internalFilter and handle the request method as their<br />
+       &nbsp;&nbsp;&nbsp;&nbsp;correspond privilege based on principal in the Token<br />
+        <br /><br />
+ NOTE : Every Request will be check if the token is valid AND check if token is in Redis Block (Logging Out user removes their token in Redis block)<br />
+ EVERY INVALID TOKEN OR NON EXISTED TOKEN IN REDIS, WILL BE REDIRECT TO SIGNIN API<br />
 
 
 <!-- LICENSE -->
