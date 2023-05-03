@@ -49,7 +49,7 @@ For more examples, please look to the <a href="https://documenter.getpostman.com
 ## Flow
 ![spring-boot-authentication-spring-security-architecture](https://user-images.githubusercontent.com/54592376/235856519-8af31b9c-cf20-49ff-aef4-3fe72e3ccbe9.png)
 
-Defined Spring Security Mechanism for Web Security Configuration (JWT) <br />
+Defined Spring Security Mechanism for Web Security Configuration (JWT) : <br /><br />
     1. User want to access certain controller , but SecurityContextHolder needs Token to be verified <br />
         &nbsp;&nbsp;&nbsp;&nbsp;--SecurityContextHolder holds a bunch of Security Configuration, example : WebSecurityConfig--<br />
         &nbsp;&nbsp;&nbsp;&nbsp;--For WebSecurityConfig, we can define order or sequence of filter that must be checked--<br />
@@ -72,14 +72,14 @@ Defined Spring Security Mechanism for Web Security Configuration (JWT) <br />
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License.
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Ingwer Ludwig - [@your_twitter](https://twitter.com/your_username)
+Ingwer Ludwig - ingwerflash@gmail.com
 
 Project Link: <a href="https://github.com/ingwerludwig/JWT-Redis-SpringSecurity-Template">Click here</a>
 
