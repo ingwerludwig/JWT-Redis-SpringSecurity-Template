@@ -11,6 +11,7 @@ import com.javagrind.oauth2practice.entity.UserEntity;
 import com.javagrind.oauth2practice.repositories.RoleRepository;
 import com.javagrind.oauth2practice.repositories.UserRepository;
 import com.javagrind.oauth2practice.security.jwt.JwtUtils;
+import com.javagrind.oauth2practice.security.services.RedisService;
 import com.javagrind.oauth2practice.security.services.UserDetailsImpl;
 import com.javagrind.oauth2practice.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    RedisService redisService;
 
     @Override
     @Transactional()
@@ -76,6 +79,8 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
+
+        redisService.store(jwt);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 //        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

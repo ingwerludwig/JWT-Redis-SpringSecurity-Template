@@ -2,11 +2,14 @@ package com.javagrind.oauth2practice.security.jwt;
 
 import com.javagrind.oauth2practice.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -31,8 +34,14 @@ public class JwtUtils {
                 .compact();
     }
 
-    public Date getExpiredAt(String token){
-        return Jwts.claims().getExpiration();
+    public Long getExpiredAt(String token){
+        String[] parts = token.split("\\.");
+        JSONObject payload = new JSONObject(decode(parts[1]));
+        return payload.getLong("exp");
+    }
+
+    private String decode(String encodedString) {
+        return new String(Base64.getUrlDecoder().decode(encodedString));
     }
 
     public String getUserNameFromJwtToken(String token) {
