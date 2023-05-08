@@ -12,11 +12,11 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class LoginRequest {
 
-    @NotBlank
-    @Size(min = 8)
+    @NotBlank(message = "password cannot empty")
+    @Size(min = 8, message = "password minimal length is 8 character")
     private String password;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "email cannot empty")
+    @Email(message = "must be a valid email")
     private String email;
 }

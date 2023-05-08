@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @Setter
 @Validated
 public class DeleteRequest {
-    @NotBlank
-    @Email
+    @NotBlank(message = "email cannot empty")
+    @Email(message = "must be a valid email")
     private String email;
 }

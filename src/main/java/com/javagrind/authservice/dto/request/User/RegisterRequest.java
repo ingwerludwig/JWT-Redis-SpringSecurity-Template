@@ -13,18 +13,18 @@ import java.util.Set;
 @Validated
 public class RegisterRequest {
 
-    @NotBlank
-    @Size(min = 3, max=20)
+    @NotBlank(message = "username cannot empty")
+    @Size(min = 3, max=20, message = "username only between 3 and 20 character")
     private String username;
 
-    @NotBlank
-    @Size(min = 8)
+    @NotBlank(message = "password cannot empty")
+    @Size(min = 8, message = "password minimal length is 8 character")
     private String password;
 
     private Set<String> role;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "email cannot empty")
+    @Email(message = "must be a valid email")
     private String email;
 
 }

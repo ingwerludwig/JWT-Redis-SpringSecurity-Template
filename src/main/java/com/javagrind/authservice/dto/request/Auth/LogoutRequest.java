@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class LogoutRequest {
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "email cannot empty")
+    @Email(message = "must be a valid email")
     private String email;
 }
